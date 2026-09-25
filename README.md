@@ -35,7 +35,7 @@ Le projet contient un dashboard et une page de détail accessible depuis le grap
 
 ```bash
 npm install
-npm start
+ng serve
 ```
 
 L’application est ensuite disponible sur `http://localhost:4200/`.
@@ -63,16 +63,16 @@ La commande de tests nécessite un binaire Chrome/Chromium disponible. Dans cet 
 ```text
 src/app/
 ├── components/
-│   ├── header/       # Titre et liste d’indicateurs
-│   ├── medal-chart/  # Wrapper Chart.js, pie et line charts
-│   └── stat-card/    # Affichage d’un indicateur
-├── models/           # Interfaces TypeScript
+│   ├── header/           # Titre et liste d’indicateurs
+│   ├── medal-chart/      # Wrapper Chart.js, pie et line charts
+│   └── stat-card/        # Affichage d’un indicateur
+├── models/               # Interfaces TypeScript
 ├── pages/
-│   ├── home/         # Dashboard
-│   ├── country/      # Détail d’un pays
-│   └── not-found/    # Route d’erreur
+│   ├── home/             # Dashboard
+│   ├── country/          # Détail d’un pays
+│   └── not-found/        # Route d’erreur
 └── services/
-    └── data.service.ts
+    └── data.service.ts   # Service qui gère les données
 ```
 
 `DataService` récupère `src/assets/mock/olympic.json`, recherche un pays et prépare les résumés utilisés par les pages. Les pages coordonnent l’affichage ; les composants réutilisables reçoivent leurs données par `@Input()`.
@@ -81,9 +81,9 @@ Voir [ARCHITECTURE.md](ARCHITECTURE.md) pour le détail des responsabilités et 
 
 ## Navigation et erreurs
 
-- `/` affiche le dashboard ;
-- `/country/:countryName` affiche le détail d’un pays valide ;
-- un pays absent redirige vers `/not-found` ;
+- `/` affiche le dashboard (`HomeComponent`);
+- `/country/:countryName` affiche le détail d’un pays valide (`CountryComponent`);
+- un pays absent redirige vers `/not-found` qui affiche `NotFoundComponent`;
 - toute URL inconnue utilise la route générique `**` et affiche `NotFoundComponent` ;
 - les erreurs de récupération affichent un message utilisateur clair sans exposer le message technique de l’exception ;
 - une absence de données ne laisse pas un écran vide.
@@ -108,6 +108,3 @@ Validation de build actuelle : `npm run build` réussit.
 
 ## Captures d’écran
 
-Le dossier `captures/` est réservé aux captures finales du dashboard et de la page détail, idéalement en desktop et mobile. Les captures doivent être prises après lancement de `npm start`, puis regroupées dans une archive `captures.zip` avant publication sur GitHub.
-
-Les captures ne sont pas générées automatiquement dans ce dépôt, car l’environnement de validation ne dispose pas d’un navigateur Chrome/Chromium pilotable.

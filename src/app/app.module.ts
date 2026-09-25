@@ -4,6 +4,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { CountryCardComponent } from './components/country-card/country-card.component';
+import { HeaderComponent } from './components/header/header.component';
 import { MedalChartComponent } from './components/medal-chart/medal-chart.component';
 import { StatCardComponent } from './components/stat-card/stat-card.component';
 import { CountryComponent } from './pages/country/country.component';
@@ -16,6 +17,7 @@ import { NotFoundComponent } from './pages/not-found/not-found.component';
     HomeComponent,
     NotFoundComponent,
     CountryComponent,
+    HeaderComponent,
     StatCardComponent,
     CountryCardComponent,
     MedalChartComponent,

@@ -1,21 +1,24 @@
-<h2>Olympic games app</h2>
-<hr />
-<div>
-  <div>
-    <div class="center">
-      <div>{{ titlePage }}</div>
-    </div>
-    <div class="split">
-      <app-stat-card label="Number of countries" [value]="totalCountries"></app-stat-card>
-      <app-stat-card label="Number of JOs" [value]="totalJOs"></app-stat-card>
-    </div>
-  </div>
+<main class="dashboard" aria-labelledby="dashboard-title">
+  <app-header
+    [title]="titlePage"
+    [indicators]="indicators">
+  </app-header>
 
-  <app-medal-chart
-    chartId="DashboardPieChart"
-    type="pie"
-    [labels]="labels"
-    [data]="chartData"
-    (countrySelected)="onCountrySelected($event)">
-  </app-medal-chart>
-</div>
+  <section class="dashboard__chart-section" aria-labelledby="chart-title">
+    <h2 id="chart-title">Medals by country</h2>
+    <p>Select a country on the chart to open its details.</p>
+
+    <p *ngIf="error" class="dashboard__error" role="alert">
+      Unable to load the Olympic data: {{ error }}
+    </p>
+
+    <app-medal-chart
+      *ngIf="!error"
+      chartId="DashboardPieChart"
+      type="pie"
+      [labels]="labels"
+      [data]="chartData"
+      (countrySelected)="onCountrySelected($event)">
+    </app-medal-chart>
+  </section>
+</main>

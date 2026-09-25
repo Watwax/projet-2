@@ -3,7 +3,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subject, takeUntil } from 'rxjs';
 
-import { DashboardSummary } from '../../models/olympic.model';
+import { DashboardIndicator, DashboardSummary } from '../../models/olympic.model';
 import { DataService } from '../../services/data.service';
 
 @Component({
@@ -18,6 +18,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   public titlePage = 'Medals per Country';
   public labels: string[] = [];
   public chartData: number[] = [];
+  public indicators: DashboardIndicator[] = [];
   private readonly destroy$ = new Subject<void>();
 
   constructor(
@@ -35,6 +36,10 @@ export class HomeComponent implements OnInit, OnDestroy {
           this.totalJOs = summary.totalJOs;
           this.labels = summary.labels;
           this.chartData = summary.chartData;
+          this.indicators = [
+            { label: 'Number of countries', value: summary.totalCountries },
+            { label: 'Number of Olympic Games', value: summary.totalJOs },
+          ];
         },
         error: (error: HttpErrorResponse) => {
           this.error = error.message;

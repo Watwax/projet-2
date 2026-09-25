@@ -16,6 +16,11 @@ export interface DashboardSummary {
   chartData: number[];
 }
 
+export interface DashboardIndicator {
+  label: string;
+  value: number;
+}
+
 export interface CountrySummary {
   title: string;
   totalEntries: number;

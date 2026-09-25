@@ -1,6 +1,7 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { Subject, takeUntil } from 'rxjs';
 
 import { DashboardSummary } from '../../models/olympic.model';
 import { DataService } from '../../services/data.service';
@@ -10,13 +11,14 @@ import { DataService } from '../../services/data.service';
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],
 })
-export class HomeComponent implements OnInit {
+export class HomeComponent implements OnInit, OnDestroy {
   public totalCountries = 0;
   public totalJOs = 0;
   public error = '';
   public titlePage = 'Medals per Country';
   public labels: string[] = [];
   public chartData: number[] = [];
+  private readonly destroy$ = new Subject<void>();
 
   constructor(
     private readonly router: Router,
@@ -24,17 +26,25 @@ export class HomeComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.dataService.getDashboardSummary().subscribe({
-      next: (summary: DashboardSummary) => {
-        this.totalCountries = summary.totalCountries;
-        this.totalJOs = summary.totalJOs;
-        this.labels = summary.labels;
-        this.chartData = summary.chartData;
-      },
-      error: (error: HttpErrorResponse) => {
-        this.error = error.message;
-      },
-    });
+    this.dataService
+      .getDashboardSummary()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (summary: DashboardSummary) => {
+          this.totalCountries = summary.totalCountries;
+          this.totalJOs = summary.totalJOs;
+          this.labels = summary.labels;
+          this.chartData = summary.chartData;
+        },
+        error: (error: HttpErrorResponse) => {
+          this.error = error.message;
+        },
+      });
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   onCountrySelected(countryName: string): void {

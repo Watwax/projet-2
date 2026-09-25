@@ -1,7 +1,7 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { switchMap } from 'rxjs';
+import { Subject, switchMap, takeUntil } from 'rxjs';
 
 import { CountrySummary } from '../../models/olympic.model';
 import { DataService } from '../../services/data.service';
@@ -11,7 +11,7 @@ import { DataService } from '../../services/data.service';
   templateUrl: './country.component.html',
   styleUrls: ['./country.component.scss'],
 })
-export class CountryComponent implements OnInit {
+export class CountryComponent implements OnInit, OnDestroy {
   public titlePage = '';
   public totalEntries = 0;
   public totalMedals = 0;
@@ -19,6 +19,7 @@ export class CountryComponent implements OnInit {
   public error = '';
   public years: string[] = [];
   public medals: number[] = [];
+  private readonly destroy$ = new Subject<void>();
 
   constructor(
     private readonly route: ActivatedRoute,
@@ -31,7 +32,8 @@ export class CountryComponent implements OnInit {
         switchMap((params) => {
           const countryName = params.get('countryName');
           return this.dataService.getCountrySummary(countryName);
-        })
+        }),
+        takeUntil(this.destroy$)
       )
       .subscribe({
         next: (summary: CountrySummary | undefined) => {
@@ -56,5 +58,10 @@ export class CountryComponent implements OnInit {
           this.error = error.message;
         },
       });
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }

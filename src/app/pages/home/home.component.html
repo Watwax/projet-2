@@ -5,9 +5,6 @@
   </app-header>
 
   <section class="dashboard__chart-section" aria-labelledby="chart-title">
-    <h2 id="chart-title">Medals by country</h2>
-    <p>Select a country on the chart to open its details.</p>
-
     <p *ngIf="error" class="dashboard__error" role="alert">
       Unable to load the Olympic data: {{ error }}
     </p>

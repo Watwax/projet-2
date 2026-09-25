@@ -6,13 +6,13 @@
 
   <section class="chart-container wrapper-container" aria-labelledby="country-chart-title">
     <div class="container">
-      <h2 id="country-chart-title">Medals by Olympic Games</h2>
       <app-medal-chart
         chartId="countryChart"
         type="line"
         [labels]="years"
         [data]="medals">
       </app-medal-chart>
+      <h2>Dates</h2>
     </div>
   </section>
 

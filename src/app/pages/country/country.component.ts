@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { switchMap } from 'rxjs';
 
-import { OlympicCountry } from '../../models/olympic.model';
+import { CountrySummary } from '../../models/olympic.model';
 import { OlympicService } from '../../services/olympic.service';
 
 @Component({
@@ -30,12 +30,12 @@ export class CountryComponent implements OnInit {
       .pipe(
         switchMap((params) => {
           const countryName = params.get('countryName');
-          return this.olympicService.getCountryByName(countryName);
+          return this.olympicService.getCountrySummary(countryName);
         })
       )
       .subscribe({
-        next: (selectedCountry: OlympicCountry | undefined) => {
-          if (!selectedCountry) {
+        next: (summary: CountrySummary | undefined) => {
+          if (!summary) {
             this.titlePage = 'Country not found';
             this.totalEntries = 0;
             this.totalMedals = 0;
@@ -45,18 +45,12 @@ export class CountryComponent implements OnInit {
             return;
           }
 
-          this.titlePage = selectedCountry.country;
-          const participations = selectedCountry.participations;
-
-          this.totalEntries = participations.length;
-          this.years = participations.map((participation) => participation.year.toString());
-          this.medals = participations.map((participation) => participation.medalsCount);
-
-          this.totalMedals = this.medals.reduce((sum, medalCount) => sum + medalCount, 0);
-          this.totalAthletes = participations.reduce(
-            (sum, participation) => sum + participation.athleteCount,
-            0
-          );
+          this.titlePage = summary.title;
+          this.totalEntries = summary.totalEntries;
+          this.totalMedals = summary.totalMedals;
+          this.totalAthletes = summary.totalAthletes;
+          this.years = summary.years;
+          this.medals = summary.medals;
         },
         error: (error: HttpErrorResponse) => {
           this.error = error.message;

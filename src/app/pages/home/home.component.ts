@@ -2,7 +2,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { OlympicCountry } from '../../models/olympic.model';
+import { DashboardSummary } from '../../models/olympic.model';
 import { OlympicService } from '../../services/olympic.service';
 
 @Component({
@@ -24,20 +24,12 @@ export class HomeComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.olympicService.getOlympicData().subscribe({
-      next: (data: OlympicCountry[]) => {
-        if (data.length > 0) {
-          const allYears = data.flatMap((country: OlympicCountry) =>
-            country.participations.map((participation) => participation.year)
-          );
-
-          this.totalJOs = new Set(allYears).size;
-          this.totalCountries = data.length;
-          this.labels = data.map((country: OlympicCountry) => country.country);
-          this.chartData = data.map((country: OlympicCountry) =>
-            country.participations.reduce((sum, participation) => sum + participation.medalsCount, 0)
-          );
-        }
+    this.olympicService.getDashboardSummary().subscribe({
+      next: (summary: DashboardSummary) => {
+        this.totalCountries = summary.totalCountries;
+        this.totalJOs = summary.totalJOs;
+        this.labels = summary.labels;
+        this.chartData = summary.chartData;
       },
       error: (error: HttpErrorResponse) => {
         this.error = error.message;

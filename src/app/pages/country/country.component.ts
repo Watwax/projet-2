@@ -1,9 +1,9 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Subject, switchMap, takeUntil } from 'rxjs';
 
-import { CountrySummary } from '../../models/olympic.model';
+import { CountrySummary, DashboardIndicator } from '../../models/olympic.model';
 import { DataService } from '../../services/data.service';
 
 @Component({
@@ -19,10 +19,13 @@ export class CountryComponent implements OnInit, OnDestroy {
   public error = '';
   public years: string[] = [];
   public medals: number[] = [];
+  public indicators: DashboardIndicator[] = [];
+  public isLoading = true;
   private readonly destroy$ = new Subject<void>();
 
   constructor(
     private readonly route: ActivatedRoute,
+    private readonly router: Router,
     private readonly dataService: DataService
   ) {}
 
@@ -37,13 +40,9 @@ export class CountryComponent implements OnInit, OnDestroy {
       )
       .subscribe({
         next: (summary: CountrySummary | undefined) => {
+          this.isLoading = false;
           if (!summary) {
-            this.titlePage = 'Country not found';
-            this.totalEntries = 0;
-            this.totalMedals = 0;
-            this.totalAthletes = 0;
-            this.years = [];
-            this.medals = [];
+            this.router.navigate(['/not-found']);
             return;
           }
 
@@ -53,11 +52,22 @@ export class CountryComponent implements OnInit, OnDestroy {
           this.totalAthletes = summary.totalAthletes;
           this.years = summary.years;
           this.medals = summary.medals;
+          this.indicators = [
+            { label: 'Participations', value: summary.totalEntries },
+            { label: 'Medals', value: summary.totalMedals },
+            { label: 'Athletes', value: summary.totalAthletes },
+          ];
         },
         error: (error: HttpErrorResponse) => {
+          this.isLoading = false;
           this.error = error.message;
         },
       });
+  }
+
+  get showChart(): boolean {
+    return !this.isLoading && !this.error
+      && this.years.length > 0 && this.medals.length > 0;
   }
 
   ngOnDestroy(): void {

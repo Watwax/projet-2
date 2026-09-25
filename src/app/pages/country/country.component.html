@@ -4,17 +4,24 @@
       <div>{{ titlePage }}</div>
     </div>
     <div class="split">
-      <app-stat-card label="Number of entries" [value]="totalEntries"></app-stat-card>
-      <app-stat-card label="Total Number of medals" [value]="totalMedals"></app-stat-card>
-      <app-stat-card label="Total Number of athletes" [value]="totalAthletes"></app-stat-card>
+      <app-country-card label="Number of entries" [value]="totalEntries"></app-country-card>
+      <app-country-card label="Total Number of medals" [value]="totalMedals"></app-country-card>
+      <app-country-card label="Total Number of athletes" [value]="totalAthletes"></app-country-card>
     </div>
   </div>
+
   <div class="chart-container wrapper-container">
     <div class="container">
-      <canvas id="countryChart">{{ lineChart }}</canvas>
+      <app-medal-chart
+        chartId="countryChart"
+        type="line"
+        [labels]="years"
+        [data]="medals">
+      </app-medal-chart>
       <h2>Date</h2>
     </div>
   </div>
+
   <div class="center">
     <a routerLink="">Go back</a>
   </div>

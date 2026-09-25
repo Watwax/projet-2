@@ -10,5 +10,12 @@
       <app-stat-card label="Number of JOs" [value]="totalJOs"></app-stat-card>
     </div>
   </div>
-  <canvas id="DashboardPieChart">{{ pieChart }}</canvas>
+
+  <app-medal-chart
+    chartId="DashboardPieChart"
+    type="pie"
+    [labels]="labels"
+    [data]="chartData"
+    (countrySelected)="onCountrySelected($event)">
+  </app-medal-chart>
 </div>

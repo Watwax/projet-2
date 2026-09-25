@@ -154,3 +154,86 @@ Pour corriger cela, il faudrait introduire :
 - des méthodes plus courtes et plus lisibles,
 - une vraie gestion d’état et d’erreur,
 - un nettoyage des tests obsolètes.
+
+# Structure cible recommandée
+
+Pour préparer la bonne architecture sans encore refactoriser le code, on peut imaginer une structure plus claire et plus maintenable.
+
+## Proposition d’arborescence
+
+```text
+src/app/
+├── app-routing.module.ts
+├── app.module.ts
+├── app.component.ts
+├── app.component.html
+├── app.component.scss
+├── pages/
+│   ├── home/
+│   │   ├── home.component.ts
+│   │   ├── home.component.html
+│   │   ├── home.component.scss
+│   │   └── home.component.spec.ts
+│   ├── country/
+│   │   ├── country.component.ts
+│   │   ├── country.component.html
+│   │   ├── country.component.scss
+│   │   └── country.component.spec.ts
+│   └── not-found/
+│       ├── not-found.component.ts
+│       ├── not-found.component.html
+│       ├── not-found.component.scss
+│       └── not-found.component.spec.ts
+├── components/
+│   ├── chart-card/
+│   ├── stat-card/
+│   └── dashboard-chart/
+├── services/
+│   └── olympic.service.ts
+└── models/
+    ├── country.model.ts
+    ├── participation.model.ts
+    └── olympic-data.model.ts
+```
+
+## Ce qui change par rapport à l’architecture actuelle
+
+- Les composants restent responsables de l’affichage et de l’interaction.
+- Les appels HTTP passent par le dossier `services/`.
+- Les types sont centralisés dans `models/`.
+- Les calculs métier sont déplacés vers un service.
+- Les composants de visualisation peuvent être isolés dans `components/` si le projet grossit.
+
+## Exemple de logique de responsabilité
+
+- `pages/home` : page d’accueil, orchestration de l’écran
+- `pages/country` : page détail d’un pays, affichage des données filtrées
+- `services/olympic.service.ts` : récupération du JSON et préparation des données
+- `models/*.ts` : interfaces pour `Country`, `Participation`, `OlympicData`
+- `components/` : micro-composants réutilisables comme les cartes de statistiques ou les graphiques
+
+## Choix de pattern adapté
+
+Dans ce projet, le bon choix est simple et lisible :
+
+- service Angular en singleton (fourni au niveau du module) pour les données,
+- séparation `component` / `service` / `model`,
+- pas de sur-complexification inutile avec plusieurs sous-couches.
+
+Cela apporte plusieurs avantages :
+
+- plus facile à maintenir,
+- meilleure testabilité,
+- réduction de la duplication,
+- meilleure séparation des responsabilités,
+- plus de clarté pour les futurs développements.
+
+## Point important à retenir
+
+Le but n’est pas de refaire le code immédiatement, mais de préparer une structure logique qui permettra plus tard un refactor propre. Le principe central reste :
+
+> tous les accès aux données doivent passer par un service, et les composants ne doivent plus manipuler directement le JSON brut.
+
+## Conclusion
+
+La structure cible proposée est volontairement simple, claire et adaptée au projet. Elle améliore la lisibilité sans compliquer inutilement le code.

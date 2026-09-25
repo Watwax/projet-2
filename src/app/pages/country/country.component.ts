@@ -4,7 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { switchMap } from 'rxjs';
 
 import { CountrySummary } from '../../models/olympic.model';
-import { OlympicService } from '../../services/olympic.service';
+import { DataService } from '../../services/data.service';
 
 @Component({
   selector: 'app-country',
@@ -22,7 +22,7 @@ export class CountryComponent implements OnInit {
 
   constructor(
     private readonly route: ActivatedRoute,
-    private readonly olympicService: OlympicService
+    private readonly dataService: DataService
   ) {}
 
   ngOnInit(): void {
@@ -30,7 +30,7 @@ export class CountryComponent implements OnInit {
       .pipe(
         switchMap((params) => {
           const countryName = params.get('countryName');
-          return this.olympicService.getCountrySummary(countryName);
+          return this.dataService.getCountrySummary(countryName);
         })
       )
       .subscribe({

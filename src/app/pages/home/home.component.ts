@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { DashboardSummary } from '../../models/olympic.model';
-import { OlympicService } from '../../services/olympic.service';
+import { DataService } from '../../services/data.service';
 
 @Component({
   selector: 'app-home',
@@ -20,11 +20,11 @@ export class HomeComponent implements OnInit {
 
   constructor(
     private readonly router: Router,
-    private readonly olympicService: OlympicService
+    private readonly dataService: DataService
   ) {}
 
   ngOnInit(): void {
-    this.olympicService.getDashboardSummary().subscribe({
+    this.dataService.getDashboardSummary().subscribe({
       next: (summary: DashboardSummary) => {
         this.totalCountries = summary.totalCountries;
         this.totalJOs = summary.totalJOs;

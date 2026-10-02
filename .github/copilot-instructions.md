@@ -1,40 +1,47 @@
-# Directives du projet (Angular 17+)
+# Directives du projet (Angular)
 
-## Context & Tech Stack
-- Framework: Angular (v17+)
-- Architecture: Standalone Components uniquement (`standalone: true`, aucun NgModule)
-- Styles: SCSS (par défaut)
+## Création & Commandes CLI
+- Lancement du serveur de dev : `ng serve`.
+- Génération de composant : `ng generate component nom_component` (ou `ng g c nom_component`).
 
-## Coding Standards & Patterns
+## Structure & Composants
+- Utiliser la syntaxe Standalone Components (`standalone: true`).
+- Importer les directives, pipes et modules nécessaires directement dans le tableau `imports` du composant (`NgStyle`, `NgClass`, `DatePipe`, `RouterLink`, etc.).
+- Pour initialiser des données après la création du composant, implémenter l'interface `OnInit` et utiliser la méthode `ngOnInit()`.
 
-### Component Architecture & Syntax
-- Tout nouveau composant doit être un Standalone Component (`standalone: true`).
-- Toujours utiliser la nouvelle syntaxe Control Flow pour le template :
-  - `@if (...) { ... } @else { ... }` (ne pas utiliser `*ngIf`).
-  - `@for (item of items; track item.id) { ... }` (exiger systématiquement le `track`, ne pas utiliser `*ngFor`).
-  - `@switch` (ne pas utiliser `*ngSwitch`).
-- Préférer la fonction `inject()` au constructeur pour l'injection de dépendances :
-  `private faceSnapsService = inject(FaceSnapsService);`
-  `private router = inject(Router);`
-  `private route = inject(ActivatedRoute);`
-- Préférer le mode de détection OnPush par défaut : `changeDetection: ChangeDetectionStrategy.OnPush`.
+## Syntaxe HTML & Templates
 
-### Component Inputs & Properties
-- Pour la réception de données dans un composant :
-  - Soit utiliser la fonction `input()` / `input.required()` (approche Signals).
-  - Soit le décorateur `@Input() myProperty!: MyType;` ou avec optionnel `@Input() myProperty?: MyType;`.
-- Pour la navigation programmatique, injecter `Router` et utiliser `this.router.navigateByUrl('path')`.
-- Pour récupérer des paramètres de route, utiliser `ActivatedRoute` (ex: `this.route.snapshot.params['id']`).
+### Control Flow Blocks
+- Conditions : Utiliser `@if (condition) { ... } @else { ... }`.
+- Boucles : Utiliser `@for (item of items; track item.prop) { ... }`.
+- Déclarer les propriétés optionnelles dans les modèles avec `propriete?: type`.
 
-### Typing, Models & Data Transfer
-- Activer le mode strict TypeScript (`strict: true`).
-- Interdire strictement l'usage du type `any`. Utiliser des types stricts, des interfaces ou des Literal Types.
-- Préférer les **Literal Types** pour restreindre des valeurs précises (ex: `export type SnapType = 'snap' | 'unsnap';`).
-- Utiliser le mot-clé `public` / `private` directement dans les constructeurs de classes de modèle pour raccourcir les déclarations si nécessaire :
+### Data & Event Binding
+- Binding d'attribut / propriété : `[attribut]="propriete"` (ex: `[src]="url"`).
+- Binding d'événement : `(event)="methode()"` (ex: `(click)="onAddPoint()"`).
+- Inputs de composants : Déclarer avec le décorateur `@Input() nomPropriete!: typePropriete;`.
+- Passer des données au composant enfant via sa balise : `<app-component [propriete]="valeur" />`.
+
+### Styles dynamiques
+- Attributs de style inline : Utiliser `[ngStyle]="{ property: value }"`.
+- Classes CSS conditionnelles : Utiliser `[ngClass]="{ 'class-name': condition }"`.
+
+### Formatage avec les Pipes
+- Textes : `UpperCasePipe`, `LowerCasePipe`, `TitleCasePipe` (`{{ variable | uppercase }}`).
+- Dates : `DatePipe` (`{{ date | date: 'd MMMM yyyy, à HH:mm' }}`).
+- Nombres : `DecimalPipe` (`{{ nb | number: '1.0-0' }}`), `PercentPipe` (`{{ ratio | percent: '1.0-1' }}`), `CurrencyPipe` (`{{ prix | currency: 'EUR' }}`).
+
+## Configuration Régionale (I18n)
+- Dans `main.ts` : Importer `registerLocaleData` de `@angular/common` et `* as fr from '@angular/common/locales/fr'`, puis exécuter `registerLocaleData(fr.default)`.
+- Dans `app.config.ts` : Ajouter `{ provide: LOCALE_ID, useValue: 'fr-FR' }` dans les `providers`.
+
+## Modèles & Types TypeScript
+- Préférer la déclaration condensée de classe avec `public` dans le constructeur :
   ```ts
   export class FaceSnap {
     id: string = crypto.randomUUID().substring(0, 8);
     location?: string;
+
     constructor(
       public title: string,
       public description: string,

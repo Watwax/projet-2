@@ -1,13 +1,17 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { Subject, switchMap, takeUntil } from 'rxjs';
 
+import { HeaderComponent } from '../../components/header/header.component';
+import { MedalChartComponent } from '../../components/medal-chart/medal-chart.component';
 import { CountrySummary, DashboardIndicator } from '../../models/olympic.model';
 import { DataService } from '../../services/data.service';
 
 @Component({
   selector: 'app-country',
+  standalone: true,
+  imports: [HeaderComponent, MedalChartComponent, RouterLink],
   templateUrl: './country.component.html',
   styleUrls: ['./country.component.scss'],
 })

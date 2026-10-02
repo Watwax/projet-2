@@ -5,9 +5,13 @@ import { Subject, takeUntil } from 'rxjs';
 
 import { DashboardIndicator, DashboardSummary } from '../../models/olympic.model';
 import { DataService } from '../../services/data.service';
+import { HeaderComponent } from '../../components/header/header.component';
+import { MedalChartComponent } from '../../components/medal-chart/medal-chart.component';
 
 @Component({
   selector: 'app-home',
+  standalone: true,
+  imports: [HeaderComponent, MedalChartComponent],
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],
 })

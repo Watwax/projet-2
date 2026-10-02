@@ -5,17 +5,18 @@
   </app-header>
 
   <section class="dashboard__chart-section" aria-labelledby="chart-title">
-    <p *ngIf="error" class="dashboard__error" role="alert">
-      Unable to load the Olympic data: {{ error }}
-    </p>
-
-    <app-medal-chart
-      *ngIf="!error"
-      chartId="DashboardPieChart"
-      type="pie"
-      [labels]="labels"
-      [data]="chartData"
-      (countrySelected)="onCountrySelected($event)">
-    </app-medal-chart>
+    @if (error) {
+      <p class="dashboard__error" role="alert">
+        Unable to load the Olympic data: {{ error }}
+      </p>
+    } @else {
+      <app-medal-chart
+        chartId="DashboardPieChart"
+        type="pie"
+        [labels]="labels"
+        [data]="chartData"
+        (countrySelected)="onCountrySelected($event)">
+      </app-medal-chart>
+    }
   </section>
 </main>

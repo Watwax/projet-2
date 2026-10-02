@@ -1,10 +1,21 @@
-import { Component, EventEmitter, Input, OnChanges, OnDestroy, Output, SimpleChanges } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  EventEmitter,
+  Input,
+  OnChanges,
+  OnDestroy,
+  Output,
+  SimpleChanges,
+} from '@angular/core';
 import Chart from 'chart.js/auto';
 
 @Component({
   selector: 'app-medal-chart',
+  standalone: true,
   templateUrl: './medal-chart.component.html',
   styleUrls: ['./medal-chart.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MedalChartComponent implements OnChanges, OnDestroy {
   @Input() chartId = 'medal-chart';

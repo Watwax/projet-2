@@ -6,15 +6,21 @@
 
   <section class="chart-container wrapper-container" aria-labelledby="country-chart-title">
     <div class="container">
-      <app-medal-chart
-        chartId="countryChart"
-        type="line"
-        [labels]="years"
-        [data]="medals">
-      </app-medal-chart>
-      <h2>Dates</h2>
+    @if (error) {
+      <p class="dashboard__error" role="alert">
+        Unable to load the Olympic data: {{ error }}
+      </p>
+    } @else {
+        <app-medal-chart
+          chartId="countryChart"
+          type="line"
+          [labels]="years"
+          [data]="medals">
+        </app-medal-chart>
+        <h2>Dates</h2>
+      }
     </div>
   </section>
 
-  <a class="country-page__back" routerLink="/">Back to dashboard</a>
+  <a class="country-page__back" [routerLink]="['/']">Back to dashboard</a>
 </main>

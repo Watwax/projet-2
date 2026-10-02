@@ -50,3 +50,30 @@
       public snaps: number
     ) {}
   }
+  ```
+- Utiliser des **Literal Types** pour restreindre les valeurs acceptées :
+  ```ts
+  export type SnapType = 'snap' | 'unsnap';
+  ```
+
+## Services & Injection de dépendances
+- Déclarer les services avec le décorateur `@Injectable({ providedIn: 'root' })`.
+- Centraliser toute la logique métier et la manipulation des données dans le service.
+- **Règle d'injection obligatoire** : Tous les services (services métier, `Router`, `ActivatedRoute`, etc.) doivent être injectés exclusivement par le constructeur de la classe :
+  ```ts
+  constructor(
+    private faceSnapsService: FaceSnapsService,
+    private router: Router,
+    private route: ActivatedRoute
+  ) {}
+  ```
+
+## Routing & Navigation (SPA)
+- Définir les routes dans `app.routes.ts` (`Routes`).
+- Déclarer le router dans `app.config.ts` via `provideRouter(routes)` dans `appConfig`.
+- Afficher les composants routés via la balise `<router-outlet />`.
+- Liens dans le HTML : Utiliser `routerLink="chemin"` et `routerLinkActive="active"`. Pour la route exacte, utiliser `[routerLinkActiveOptions]="{ exact: true }"`.
+- Navigation programmatique : Injecter `Router` dans le constructeur (`constructor(private router: Router) {}`) et utiliser `this.router.navigateByUrl('chemin')`.
+- Navigation avec paramètres d'URL :
+  - Déclarer la route avec paramètre : `{ path: 'facesnaps/:id', component: SingleFaceSnapComponent }`.
+  - Récupérer les paramètres via `ActivatedRoute` : injecter `private route: ActivatedRoute` dans le constructeur et lire `this.route.snapshot.params['id']`.

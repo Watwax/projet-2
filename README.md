@@ -108,3 +108,12 @@ Validation de build actuelle : `npm run build` réussit.
 
 ## Captures d’écran
 
+### Page Home
+
+<img width="1212" height="733" alt="Capture d’écran du 2026-10-02 11-51-29" src="https://github.com/user-attachments/assets/eb4ac0d2-6147-476b-972c-6f76dba9bba9" />
+
+### Page Country
+
+<img width="1213" height="757" alt="Capture d’écran du 2026-10-02 11-51-38" src="https://github.com/user-attachments/assets/8ac4c6ea-a45b-4a3e-8654-d9396eebb8a0" />
+
+

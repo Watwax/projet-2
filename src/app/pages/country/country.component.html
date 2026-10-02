@@ -1,30 +1,26 @@
-<div>
-  <div>
-    <div class="center">
-      <div>{{ titlePage }}</div>
-    </div>
-    <div class="split">
-      <div>
-        <p>Number of entries</p>
-        <p>{{ totalEntries }}</p>
-      </div>
-      <div>
-        <p>Total Number of medals</p>
-        <p>{{ totalMedals }}</p>
-      </div>
-      <div>
-        <p>Total Number of athletes</p>
-        <p>{{ totalAthletes }}</p>
-      </div>
-    </div>
-  </div>
-  <div class="chart-container wrapper-container">
+<main class="country-page">
+  <app-header
+    [title]="titlePage"
+    [indicators]="indicators">
+  </app-header>
+
+  <section class="chart-container wrapper-container" aria-labelledby="country-chart-title">
     <div class="container">
-      <canvas id="countryChart">{{ lineChart }}</canvas>
-      <h2>Date</h2>
+    @if (error) {
+      <p class="dashboard__error" role="alert">
+        Unable to load the Olympic data: {{ error }}
+      </p>
+    } @else {
+        <app-medal-chart
+          chartId="countryChart"
+          type="line"
+          [labels]="years"
+          [data]="medals">
+        </app-medal-chart>
+        <h2>Dates</h2>
+      }
     </div>
-  </div>
-  <div class="center">
-    <a routerLink="">Go back</a>
-  </div>
-</div>
+  </section>
+
+  <a class="country-page__back" [routerLink]="['/']">Back to dashboard</a>
+</main>

@@ -1,0 +1,12 @@
+<header class="page-header">
+  <h1>{{ title }}</h1>
+
+  <div class="page-header__indicators" aria-label="Key figures">
+    @for (indicator of indicators; track indicator.label) {
+      <app-stat-card
+        [label]="indicator.label"
+        [value]="indicator.value">
+      </app-stat-card>
+    }
+  </div>
+</header>
